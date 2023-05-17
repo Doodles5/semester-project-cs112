@@ -1,0 +1,190 @@
+   void authentication() {
+
+      cout << "Welcome to GIKI Pay Banking System - where your finances are in safe hands! "<<endl;
+
+      login();
+      cout<<endl<<endl<<endl;
+      if (verify() == 1) {
+         if (choice== 1)
+            main();                  //for admin
+         else
+            transaction();             // for user
+      } 
+	  else if (verify() == 0) {
+         system("cls");
+         cout << "Incorrect Username / Password !!!!";
+         cout << endl;
+         authentication();
+      }
+   }
+   
+   
+   
+   
+//module for adding accounts.
+
+void gikipay::add(){
+	
+	
+	char choice_add;
+	record recs;
+	
+	//app = append binary / write data to the file.
+	
+	ofstream xon;       //write data
+	
+	xon.open("record.bin", ios::app | ios::binary); // data will be written at end of the file
+	
+	 int i = 0, x;
+   // first we evaluate body and check condition
+    do {
+      system("cls");
+
+      cout << " CUSTOMER ACCOUNT REGISTRATION ";
+      cout<<endl;
+      
+      cout << "[1] . Enter Your Name           : ";
+      cin >> recs.name;
+
+      cout << "[2] . Enter Your Account Number : ";
+      cin>>recs.account;
+
+      cout << "[3] . Enter Your Phone Number   : ";
+      cin >> recs.phone;
+
+      cout << "[4] . Enter Your Address        : ";
+      cin >> recs.address;
+
+      cout << "[5] . Enter Your E-mail         : ";
+      cin >> recs.email;
+
+      cout << "[6] . Enter Your Citizenship No.: ";
+      cin >> recs.citizenship_no;
+
+      cout << "[7] . Enter Amount To Deposit   : $";
+      cin>>recs.balance;
+                                                        
+                                                        
+      srand(time(0)); //random number
+      
+      for (int r = 0; r < 10; r++) {
+         recs.UserID[r] = rand() % 10;
+      }
+      
+      //write() = for writing binary data
+      // reinterpret_cast - casting one pointer data type to another pointer data type
+      //This helps to write contents in a class variable in the file and stores it in the variable rec.
+      //char is just a byte , //sizeof gets no. of byte it takes to hold whatevery type rec is
+
+	xon.write(reinterpret_cast < char * > ( & recs), sizeof(recs)); //whatever &rec is treat it as char *
+	
+	
+      cout << "CUSTOMER ACCOUNT REGISTRATION SUCCESSFULL";
+      i++;
+      cout << endl;
+      cout << "Do You Want To Add Another Record ? (Y/N) : ";
+      cin>>choice_add;
+  }
+      
+    while (choice_add == 'Y' || choice_add == 'y');
+    xon.close();
+
+   cout << "Press any key to return back to main menu. ";
+   char z = getch();
+   
+   if (z == 13) {
+      main();
+   }
+   
+    else
+      view();
+  }
+  
+  
+  
+    // module for deleting accout;
+  void gikipay::del(){
+  	
+  	record recs;
+  	ifstream con;
+  	ofstream xon;
+  	
+  	int t,p;
+  	
+  	
+  	re:
+  		 cout << " DELETE CUSTOMER ACCOUNT ";
+  		 cout<<endl;
+  		 
+  		 cout << "Enter Your Account Number To Delete : ";
+         cin>>t;
+         
+         
+         if(ca(t)==1){
+         	con.open("record.bin", ios::in | ios::binary);
+            xon.open("new.bin", ios::out | ios::binary);                                                 // if{ while  {if}  }
+            
+            while (con.read(reinterpret_cast < char * > ( & recs), sizeof(recs))) {
+                      if (recs.account != t)
+                      xon.write(reinterpret_cast < char * > ( & recs), sizeof(recs));
+		 }
+		 
+	  con.close();
+      xon.close();
+      ifstream xon;
+      ofstream con;
+      con.open("record.bin", ios::out | ios::binary); // write only
+      xon.open("new.bin", ios::in | ios::binary);
+      
+      
+      while (xon.read(reinterpret_cast < char * > ( & recs), sizeof(recs)))
+         con.write(reinterpret_cast < char * > ( & recs), sizeof(recs));
+      xon.close();
+      con.close();	 
+  }
+  
+  else if(ca(t)==0){
+
+
+     system("cls");
+      cout << "Account Doesn't Exist";
+      cout<<endl;
+      
+      
+      goto re;
+   
+  
+  }
+  
+  
+   cout << "CUSTOMER ACCOUNT DELETED SUCCESSFULLY";
+cout<<endl;
+   cout << "Press any key to return back to main menu. ";
+   getch();
+   main();
+
+}
+
+
+
+
+//module for logging out of the program.
+void gikipay::mainexit() { 
+   system("cls");
+
+   cout << " THANK YOU ";
+cout<<endl;
+cout<<endl;
+cout<<endl;
+   cout << "USER            :: " << id;
+   cout<<endl;
+   time_t t;
+   time( & t);
+   cout<<endl;
+   cout << "Logged Out Time :: " << ctime( & t);
+   cout<<endl;
+   fflush(stdin);
+   getch();
+
+   exit(0);
+}
