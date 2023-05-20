@@ -21,6 +21,21 @@
    
    
    
+class record {                                                                      //inheritance
+
+   public: 
+                                                                       
+   char name[25];
+   int account;
+   char phone[15];
+   char address[25];
+   char email[35];
+   char citizenship_no[20];
+   double balance;
+   char UserID[10];
+
+};
+   
 //module for adding accounts.
 
 void gikipay::add(){
